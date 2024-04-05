@@ -1,6 +1,4 @@
 import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,7 +28,6 @@ fun MainCompose(context: Context, navController: NavHostController, mainViewMode
     val logView = LogViewModel(LocalContext.current)
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    checkIfEnabled(context, mainViewModel.connection, mainViewModel.serviceIntent)
 
     MapleServerTheme {
         ModalNavigationDrawer(
@@ -152,12 +149,4 @@ fun DrawerToggleButton(drawerState: DrawerState, scope: CoroutineScope) {
         }) {
         Icon(imageVector = Icons.Default.Menu, contentDescription = "Drawer Toggle Button")
     }
-}
-
-fun checkIfEnabled(
-    context: Context,
-    connection: ServiceConnection,
-    serviceIntent: Intent
-) {
-    context.bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE)
 }

@@ -37,6 +37,9 @@ class ServerService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val mainActivityIntent = Intent(this, MainActivity::class.java)
+        mainActivityIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+
         val channelId = intent?.getStringExtra("channel_id") ?: "default_id"
         val pendingIntent : PendingIntent?
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -44,6 +47,8 @@ class ServerService : Service() {
         } else {
             pendingIntent = intent?.getParcelableExtra<PendingIntent>("pending_intent")
         }
+
+
         val initializationThread = Thread {
             val args = arrayOf("-Xmx2048m", "-Dwz-path=wz", "-Djava.net.preferIPv4Stack=true")
             Server.getInstance(applicationContext)

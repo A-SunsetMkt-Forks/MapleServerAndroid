@@ -16,20 +16,27 @@ class MainViewModel(context: Context) {
     val serviceIntent = Intent(context, ServerService::class.java)
     val yamlMapper = YAMLMapper()
     val serverConfig: ServerConfig = yamlMapper.readValue(File(context.dataDir, "config.yaml"), ServerConfig::class.java)
+    var isServiceBound: Boolean = false
 
     val connection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(
             className: ComponentName,
             service: IBinder
         ) {
+            IsServiceRunning(service)
+            isServiceBound = true
+        }
+
+        override fun onServiceDisconnected(arg0: ComponentName) {
+            isServiceBound = false
+        }
+
+        fun IsServiceRunning(service: IBinder) {
             val binder: ServerService.LocalBinder = service as ServerService.LocalBinder
             val myService = binder.getService()
 
             isStartButtonEnabled.value = !myService.isRunning()
             isStopButtonEnabled.value = myService.isRunning()
-        }
-
-        override fun onServiceDisconnected(arg0: ComponentName) {
         }
     }
     val notificationPendingIntent: PendingIntent by lazy {

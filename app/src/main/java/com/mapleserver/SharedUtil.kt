@@ -10,12 +10,18 @@ import androidx.lifecycle.AndroidViewModel
 
 class SharedUtil(application: Application) : AndroidViewModel(application) {
     companion object {
-        fun startMapleServer(context: Context, serviceIntent : Intent, notificationPendingIntent: PendingIntent) {
+
+        fun startMapleServer(
+            context: Context,
+            serviceIntent: Intent,
+            notificationPendingIntent: PendingIntent
+        ) {
             serviceIntent.putExtra("channel_id", "1")
             serviceIntent.putExtra("pending_intent", notificationPendingIntent)
             startForegroundService(context, serviceIntent)
         }
-        fun stopMapleServer(context: Context, serviceIntent : Intent, connection : ServiceConnection) {
+
+        fun stopMapleServer(context: Context, serviceIntent: Intent, connection: ServiceConnection) {
             context.unbindService(connection)
             context.stopService(serviceIntent)
         }
